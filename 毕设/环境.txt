@@ -1,0 +1,22 @@
+Smart Car System
+CarAround
+
+工具
+Eclipse
+Maven
+MySQL Workbench
+GitHub
+
+技术
+java 1.8
+SpringBoot 1.5.10.RELEASE
+thymeleaf
+nekohtml
+MySQL 5.7
+MyBatis 1.2.1
+
+html
+css
+js
+bootstrap 3.3.7
+jquery 3.3.1
