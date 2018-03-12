@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>video</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/video.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="fm-list-div">
+		<div class="list-group">
+			<a href="#" class="list-group-item active" data-url="http://lhttp.qingting.fm/live/4985/64k.mp3">CNR中国交通广播</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/386/64k.mp3">CNR中国之声</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/387/64k.mp3">CNR经济之声</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/1005/64k.mp3">CRI环球资讯</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/4990/64k.mp3">CNR相声小品</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/388/64k.mp3">CNR音乐之声</a>
+			<a href="#" class="list-group-item" data-url="http://lhttp.qingting.fm/live/1609/64k.mp3">陕西都市广播</a>
+		</div>
+	</div>
+
+	<audio class="player-audio" src="http://lhttp.qingting.fm/live/4985/64k.mp3" controls autoplay></audio>
+	
+	<script>
+		$(function(){
+			$(".list-group-item").click(function(){
+				if($(this).attr("class") == "list-group-item active"){
+					return;
+				}
+				$(".list-group-item").attr("class","list-group-item");
+				$(this).attr("class","list-group-item active");
+				$(".player-audio").attr("src",$(this).attr("data-url"));
+				$(".player-audio")[0].load();
+				$(".player-audio")[0].play();
+			})
+		})
+	</script>
+</body>
+</html>

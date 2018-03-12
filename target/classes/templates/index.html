@@ -4,32 +4,33 @@
 <meta charset="UTF-8">
 <title>Car Around</title>
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/index.css">
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style>
-</style>
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-2 col-xs-2 navigation-div">
 				<div style="height: 10%"></div>
-				<div style="height: 20%;">
-					<img src="images/voice-icon.png" class="img-circle">
+				<div style="height: 15%;">
+					<img src="/images/voice-icon.png" class="img-circle">
 				</div>
 				<div style="height: 10%"></div>
-				<div style="height: 30%;">
-					<div class="clock-div">00:00</div>
+				
+				<div style="height: 30%;" class="clock-div">
+					00:00
 				</div>
-				<div style="height: 20%;">
-					<img src="images/index-icon.png" class="img-circle">
+				
+				<div style="height: 10%"></div>
+				<div style="height: 15%;">
+					<img id="index-img" src="/images/index-icon.png" class="img-circle">
 				</div>
 				<div style="height: 10%"></div>
 			</div>
 			
 			<div class="col-md-10 col-xs-10 content-div">
-				<iframe id="" src="" frameborder="0" style="height:99%;width:100%"></iframe>
+				<iframe id="index-iframe" src="/home" frameborder="0" style="height:100%;width:100%;"></iframe>
 			</div>
 		</div>
 	</div>
@@ -45,6 +46,12 @@
 		function toTimeStr(number){
 			return number<10?"0"+number:number;
 		}
+		
+		$(function(){
+			$("#index-img").click(function(){
+				$("#index-iframe")[0].contentWindow.location.href="/home";
+			});
+		})
 	</script>
 </body>
 </html>

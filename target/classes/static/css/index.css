@@ -1,1 +1,46 @@
 @charset "UTF-8";
+html,body{
+    height: 100%;
+    width: 100%;
+    overflow-y:hidden;
+}
+
+div.container-fluid{
+    height: 100%;
+}
+
+div.container-fluid>.row{
+    height: 100%;
+}
+
+.navigation-div{
+	background: linear-gradient(to bottom, #45484d 0%,#000000 100%);
+	border-right-style: solid;
+	border-right-color: #585858;
+	border-right-width: 1px;
+	height: 100%;
+}
+
+div.navigation-div>div{
+	text-align:center;
+}
+
+img.img-circle{
+	height: 100%;
+	background: white;
+	padding: 10px;
+}
+
+div.clock-div{
+	color: white;
+	font-size: 65px;
+  	display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.content-div{
+	padding: 0px;
+	height: 100%;
+}

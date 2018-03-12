@@ -1,0 +1,19 @@
+@charset "UTF-8";
+body{
+    overflow-y:hidden;
+}
+
+.fm-list-div{
+	height: 90%;
+	width: 100%;
+}
+
+.player-audio{
+	height: 10%;
+	width: 100%;
+}
+
+.list-group-item{
+	font-size: 30px;
+	padding: 20px;
+}

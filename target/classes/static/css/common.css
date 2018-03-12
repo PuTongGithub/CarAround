@@ -4,38 +4,6 @@ html,body{
     width: 100%;
 }
 
-div.container-fluid{
-    height: 100%;
-}
-
-div.container-fluid>.row{
-    height: 100%;
-}
-
-.navigation-div{
+body{
 	background: linear-gradient(to bottom, #45484d 0%,#000000 100%);
-	border-right-style: solid;
-	border-right-color: #585858;
-	border-right-width: 1px;
-	height: 100%;
-}
-
-div.navigation-div>div{
-	text-align:center;
-}
-
-img.img-circle{
-	height: 75%;
-	background: white;
-	padding: 10px;
-}
-
-div.clock-div{
-	color: white;
-	font-size: 55px;
-}
-
-.content-div{
-	background: linear-gradient(to bottom, #45484d 0%,#000000 100%);
-	height:100%;
 }
