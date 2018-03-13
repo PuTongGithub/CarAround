@@ -19,4 +19,9 @@ public class PagesCountroller {
 	public String video() {
 		return "/video/video";
 	}
+	
+	@GetMapping("/weather")
+	public String weather() {
+		return "/weather/weather";
+	}
 }

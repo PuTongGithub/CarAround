@@ -1,0 +1,107 @@
+@charset "UTF-8";
+body{
+	background: linear-gradient(to bottom, rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%);
+}
+
+div{
+	color: white;
+}
+
+.city-div{
+	height: 100%;
+	width: 100%;
+  	display: flex;
+    align-items: center;
+    padding-left: 50px;
+	font-size: 36px;
+}
+
+.now-weather-div>div{
+	float: left;
+	height: 100%;
+}
+
+.weather-icon-div{
+  	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weather-now-div{
+  	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.temperature-div{
+	text-align: center;
+	font-size: 144px;
+}
+
+.description-div{
+	text-align: center;
+	font-size: 64px;
+}
+
+.suggestion-div{
+	padding-left: 10px;
+	padding-right: 5px;
+}
+
+.suggestion-ul{
+	height: 100%;
+	width: 100%;
+	list-style: none;
+	padding-left: 0px;
+}
+
+.suggestion-ul>li{
+	width: 50%;
+	height: 33.3%;
+	float: left;
+}
+
+.suggestion-icon-img{
+	height: 100%;
+	padding: 10px;
+	float: left;
+}
+
+.suggestion-ul>li>div{
+	height: 100%;
+  	display: flex;
+    align-items: center;
+}
+
+.suggestion-name-span{
+	font-size: 18px;
+}
+
+.suggestion-value-span{
+	font-size: 24px;
+}
+
+.future-weather-div{
+	width: 100%;
+}
+
+.future-weather-div>div{
+  	display: flex;
+    align-items: center;
+    justify-content: center;
+	float:left;
+	padding-top: 40px;
+	height: 100%;
+	width: 33.3%;
+}
+
+.future-weather-div>div>div{
+	text-align: center;
+	font-size: 24px;
+}
+
+.statement-div{
+	text-align: right;
+	padding-right: 20px;
+	font-size: 16px;
+}

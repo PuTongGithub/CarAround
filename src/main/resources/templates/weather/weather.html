@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>weather</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/weather.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div style="height:10%">
+		<div class="city-div"></div>
+	</div>
+
+	<div class="now-weather-div" style="height:40%">
+		<div class="weather-icon-div" style="width:20%">
+			<img src="/images/weather/icons/0.png">
+		</div>
+		<div class="weather-now-div" style="width:30%">
+			<div>
+			<p class="temperature-div"></p>
+			<p class="description-div"></p>
+			</div>
+		</div>
+		<div class="suggestion-div" style="width:50%">
+			<ul class="suggestion-ul">
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/car.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">洗车指数</span><br />
+							<span id="car-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/dressing.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">穿衣指数</span><br />
+							<span id="dressing-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/flu.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">感冒指数</span><br />
+							<span id="flu-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/sport.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">运动指数</span><br />
+							<span id="sport-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/travel.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">旅游指数</span><br />
+							<span id="travel-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img class="suggestion-icon-img" src="images/weather/suggestion/uv.png">
+					<div>
+						<div>
+							<span class="suggestion-name-span">紫外线强度</span><br />
+							<span id="uv-span" class="suggestion-value-span"></span>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="future-weather-div" style="height:45%">
+		<div>
+			<div>
+				<p>今天</p>
+				<img id="day-0-img" src="/images/weather/icons/0.png">
+				<p id="day-0-tem-p"></p>
+				<p id="day-0-des-p"></p>
+			</div>
+		</div>
+		<div>
+			<div>
+				<p>明天</p>
+				<img id="day-1-img" src="/images/weather/icons/0.png">
+				<p id="day-1-tem-p"></p>
+				<p id="day-1-des-p"></p>
+			</div>
+		</div>
+		<div>
+			<div>
+				<p>后天</p>
+				<img id="day-2-img" src="/images/weather/icons/0.png">
+				<p id="day-2-tem-p"></p>
+				<p id="day-2-des-p"></p>
+			</div>
+		</div>
+	</div>
+	
+	<div style="height:5%">
+		<div class="statement-div">数据来自 心知天气</div>
+	</div>
+	
+	<script>
+		var now_json={"url":"https://api.seniverse.com/v3/weather/now.json?key=wwhivxuy54vhriyc&location=ip&language=zh-Hans&unit=c"};
+		var suggestion_json={"url":"https://api.seniverse.com/v3/life/suggestion.json?key=wwhivxuy54vhriyc&location=ip&language=zh-Hans"};
+		var daily_json={"url":"https://api.seniverse.com/v3/weather/daily.json?key=wwhivxuy54vhriyc&location=ip&language=zh-Hans&unit=c&start=0&days=3"};
+		
+		$.ajax({
+			url: "/getData.json",
+			type: "GET",
+			data: now_json,
+			cache: false,
+			success:function(data){
+				result = data.results[0];
+				var city_names = result.location.path.split(",");
+	            $(".city-div").html(city_names[2]+" "+city_names[1]);
+	            $(".weather-icon-div>img").attr("src",build_icon_url(result.now.code));
+	            $(".temperature-div").html(result.now.temperature+"°");
+	            $(".description-div").html(result.now.text);
+	        }
+		})
+		
+		$.ajax({
+			url: "/getData.json",
+			type: "GET",
+			data: suggestion_json,
+			cache: false,
+			success:function(data){
+				suggestion = data.results[0].suggestion;
+	            $("#car-span").html(suggestion.car_washing.brief);
+	            $("#dressing-span").html(suggestion.dressing.brief);
+	            $("#flu-span").html(suggestion.flu.brief);
+	            $("#sport-span").html(suggestion.sport.brief);
+	            $("#travel-span").html(suggestion.travel.brief);
+	            $("#uv-span").html(suggestion.uv.brief);
+	        }
+		})
+		
+		$.ajax({
+			url: "/getData.json",
+			type: "GET",
+			data: daily_json,
+			cache: false,
+			success:function(data){
+				daily = data.results[0].daily;
+				for(var i=0; i<3; i++){
+		            $("#day-"+i+"-img").attr("src",build_icon_url(daily[i].code_day));
+		            $("#day-"+i+"-tem-p").html(daily[i].low+"°/"+daily[i].high+"°");
+		            $("#day-"+i+"-des-p").html(daily[i].text_day);
+				}
+	        }
+		})
+		
+		function build_icon_url(status){
+			return "/images/weather/icons/"+status+".png";
+		}
+	</script>
+</body>
+</html>
