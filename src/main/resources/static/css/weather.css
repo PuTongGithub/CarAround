@@ -97,7 +97,11 @@ div{
 
 .future-weather-div>div>div{
 	text-align: center;
-	font-size: 24px;
+	font-size: 28px;
+}
+
+p{
+	margin-bottom: 5px;
 }
 
 .statement-div{
