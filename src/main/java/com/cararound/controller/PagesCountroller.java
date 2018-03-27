@@ -24,4 +24,9 @@ public class PagesCountroller {
 	public String weather() {
 		return "/weather/weather";
 	}
+	
+	@GetMapping("/map")
+	public String map() {
+		return "/map/map";
+	}
 }
