@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>news</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/news.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="news-list-div">
+		<ul class="list-group">
+			
+		</ul>
+	</div>
+	
+	<script>
+	var news_url=encodeURIComponent("http://v.juhe.cn/toutiao/index?type=&key=86be63727a9091e03cdfebfef3940bbd");
+	var news_json={"url":news_url};
+	$.ajax({
+		url: "/getData.json",
+		type: "GET",
+		data: news_json,
+		cache: false,
+		success:function(data){
+			var data_list = data.result.data;
+			for(var i=0; i<data_list.length; i++){
+				var title=data_list[i].title;
+				var pic_url=data_list[i].thumbnail_pic_s;
+				var author_name=data_list[i].author_name;
+				var data_url=data_list[i].url;
+				$(".list-group").append(
+					'<li class="list-group-item" data-url="'+data_url+'">'+
+					'<div class="list-img"><img src="'+pic_url+'"></div>'+
+					'<div class="list-content">'+
+					'<div class="list-title">'+title+'</div>'+
+					'<div class="list-author">'+author_name+'</div></div></li>'
+				)
+			}
+        }
+	})
+	</script>
+</body>
+</html>

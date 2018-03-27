@@ -20,6 +20,11 @@ public class PagesCountroller {
 		return "/video/video";
 	}
 	
+	@GetMapping("/fm")
+	public String fm() {
+		return "/fm/fm";
+	}
+	
 	@GetMapping("/weather")
 	public String weather() {
 		return "/weather/weather";
@@ -28,5 +33,10 @@ public class PagesCountroller {
 	@GetMapping("/map")
 	public String map() {
 		return "/map/map";
+	}
+	
+	@GetMapping("/news")
+	public String news() {
+		return "/news/news";
 	}
 }
