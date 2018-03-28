@@ -11,9 +11,7 @@
 </head>
 <body>
 	<div class="news-list-div">
-		<ul class="list-group">
-			
-		</ul>
+		<ul class="list-group"></ul>
 	</div>
 	
 	<script>
@@ -39,6 +37,10 @@
 					'<div class="list-author">'+author_name+'</div></div></li>'
 				)
 			}
+			$(".list-group-item").bind("click",function(){
+				var url="/news-article?url="+$(this).attr("data-url");
+				window.location.href=url;
+			})
         }
 	})
 	</script>

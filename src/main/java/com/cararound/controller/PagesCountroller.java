@@ -1,10 +1,18 @@
 package com.cararound.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.cararound.service.GetArticleService;
 
 @Controller
 public class PagesCountroller {
+	
+	@Autowired
+	GetArticleService getArticleService;
+	
 	@GetMapping("/")
 	public String index() {
 		return "index";
@@ -38,5 +46,12 @@ public class PagesCountroller {
 	@GetMapping("/news")
 	public String news() {
 		return "/news/news";
+	}
+	
+	@GetMapping("/news-article")
+	public String news_article(String url, Model model) throws Exception {
+		String content = getArticleService.getArticle(url);
+		model.addAttribute("article_content", content);
+		return "/news/news-article";
 	}
 }

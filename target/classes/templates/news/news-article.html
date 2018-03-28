@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>news article</title>
+<link rel="stylesheet" href="https://mini.eastday.com/toutiaoh5/css/photoswipe/photoswipe.min.css">
+<link rel="stylesheet" href="https://mini.eastday.com/toutiaoh5/css/common.min.css">
+<link rel="stylesheet" href="https://mini.eastday.com/toutiaoh5/css/page_details_v5.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+	.btn{
+		font-size: 20px;
+		margin: 10px;
+		float: right;
+	}
+</style>
+</head>
+<body>
+	<article th:utext="${article_content}" id="J_article" class="J-article article"></article>
+	<button type="button" class="btn btn-link" onclick="window.history.back()">返回新闻列表</button>
+</body>
+</html>
