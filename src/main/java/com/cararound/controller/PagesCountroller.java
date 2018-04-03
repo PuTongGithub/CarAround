@@ -54,4 +54,14 @@ public class PagesCountroller {
 		model.addAttribute("article_content", content);
 		return "/news/news-article";
 	}
+	
+	@GetMapping("/music")
+	public String music() {
+		return "/music/music";
+	}
+	
+	@GetMapping("/music-player")
+	public String music_player() {
+		return "/music/music-player";
+	}
 }
