@@ -6,16 +6,41 @@
 <link rel="stylesheet" href="css/music.css">
 <link rel="stylesheet" href="css/common.css">
 <script src="https://y.gtimg.cn/music/h5/player/player.js?max_age=2592000"></script>
+<script src="js/music.js"></script>
 </head>
 <body>
-<iframe src="/music-player" frameborder="0"></iframe>
+<iframe id="myFrame" src="/music-player" frameborder="0"></iframe>
 <script type="text/javascript">
-	//初始化播放组件
-	var player = new QMplayer({ target: "auto" }); // 设置 target=music 时会拉起QQ音乐客户端进行播放
+	var player = new QMplayer({ target: "auto" }); //初始化播放组件
 
-	// 播放歌曲
-	//player.play("004Z8Ihr0JIu5s");
+	var now_song=new Song("等你下课(with 杨瑞代)","周杰伦","等你下课","001J5QJL1pRQYB");
+	player.play(now_song.mid);
 
+	function play_search_song(song){
+		now_song=song;
+		player.play(song.mid);
+	}
+	
+	player.on("play", function(){
+		var player_url="/music-player";
+		var frame_url=myFrame.contentWindow.pathname;
+		if(player_url == frame_url){
+			send_song();
+		}
+	})
+	
+	function send_song(){
+		myFrame.contentWindow.change_song(now_song);
+	}
+	
+	function play_pause(){
+		if(player.state=='playing'){
+			player.pause();
+		}
+		else{
+			player.play();
+		}
+	}
 </script>
 </body>
 </html>

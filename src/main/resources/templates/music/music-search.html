@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>music search</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/music-search.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/string-format.js"></script>
+<script src="js/music.js"></script>
+</head>
+<body>
+	<div style="height:15%">
+		<a id="back-btn" class="btn btn-default" href="/music-player">
+			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
+			<span>音乐</span>
+		</a>
+		<div id="title-div">歌曲搜索</div>
+	</div>
+	
+	<div class="search-div" style="height:15%">
+		<div class="input-div">
+			<input type="text" class="form-control" id="search-input">
+		</div>
+		<button class="btn btn-default search-btn">
+			<span class="glyphicon glyphicon-search"></span>
+		</button>
+	</div>
+	
+	<div class="music-list-div">
+	</div>
+	
+	<script>
+		var search_api="http://s.music.qq.com/fcgi-bin/music_search_new_platform?"+
+				"t=0&amp;n=10&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8"+
+				"&notice=0&platform=jqminiframe.json&needNewCode=0&p={0}&catZhida=0"+
+				"&remoteplace=sizer.newclient.next_song&w={1}";
+				
+		var page_now=1;
+		var content_now='';
+	
+		function search_music(page,content){
+			var url=encodeURIComponent(search_api.format(page,content));
+			var search_json={"url":url};
+			$.ajax({
+				url: "/getData.json",
+				type: "GET",
+				data: search_json,
+				cache: false,
+				success:function(data){
+					var list = data.data.song.list;
+					for(var i=0; i<list.length; i++){
+						var mid=list[i].f.split("|")[20];
+						$(".music-list-div").append('<div class="list-item" data-mid="'+mid+'">'+
+								'<div class="list-title-div">'+list[i].fsong+'</div>'+
+								'<div class="list-singer-div">'+list[i].fsinger+'</div>'+
+								'<div class="list-album-div">'+list[i].albumName_hilight+'</div>'+
+								'<div class="list-btns-div">'+
+									'<button class="btn btn-default play-btn"><span class="glyphicon glyphicon-play"></span></button>'+
+									'<button class="btn btn-default like-btn"><span class="glyphicon glyphicon-plus"></span></button>'+
+								'</div></div>')
+					}
+					$(".play-btn").bind("click",play_song);
+		        }
+			})
+		}
+		
+		function load_more(){
+			page_now++;
+			search_music(page_now,content_now);
+		}
+		
+		function play_song(){
+			var list_item=$(this).parent().parent();
+			var mid=list_item.attr("data-mid");
+			var title=list_item.find(".list-title-div").html();
+			var singer=list_item.find(".list-singer-div").html();
+			var album=list_item.find(".list-album-div").html();
+			var song=new Song(title,singer,album,mid);
+			parent.play_search_song(song);
+		}
+		
+		$(function(){
+			$(".search-btn").click(function(){
+				var content=$("#search-input").val();
+				if(content == '') return;
+				
+				page_now=1;
+				content_now=content;
+				$(".music-list-div").empty();
+				search_music(page_now,content_now);
+			})
+			
+			$(window).scroll(function(){
+				　　var scrollTop = $(this).scrollTop();
+				　　var scrollHeight = $(document).height();
+				　　var windowHeight = $(this).height();
+				　　if(scrollTop + windowHeight == scrollHeight){
+				　　　　load_more();
+				　　}
+			});
+			
+		})
+	</script>
+</body>
+</html>
