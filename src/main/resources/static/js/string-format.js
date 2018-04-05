@@ -21,3 +21,31 @@ String.prototype.format = function(args) {
 	}
 	return result;
 }
+
+String.prototype.word_len = function() { // 计算String的字节数
+	return this.replace(/[^\x00-\xff]/g, "rr").length;
+}
+
+String.prototype.word_sub = function(n) { // 从0截取n长的字节数
+	var r = /[^\x00-\xff]/g;
+	if (this.replace(r, "mm").length <= n)
+		return this;
+	// n = n - 3;
+	var m = Math.floor(n / 2);
+	for (var i = m; i < this.length; i++) {
+		if (this.substr(0, i).replace(r, "mm").length >= n) {
+			return this.substr(0, i);
+		}
+	}
+	return this;
+};
+
+function cut_word(str, max_word_length) {
+	if(str==''||str==null) return '';
+	if(str.word_len() > max_word_length){
+		return str.word_sub(max_word_length-3)+'...';
+	}
+	else{
+		return str;
+	}
+}

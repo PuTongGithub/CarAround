@@ -69,4 +69,9 @@ public class PagesCountroller {
 	public String music_search() {
 		return "/music/music-search";
 	}
+	
+	@GetMapping("/music-list")
+	public String music_list() {
+		return "/music/music-list";
+	}
 }

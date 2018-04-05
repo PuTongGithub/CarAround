@@ -24,7 +24,7 @@
 	</div>
 	
 	<div id="player-btns-div" style="height:30%">
-		<div id="last-btn-div">
+		<div id="prev-btn-div">
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-step-backward"></span>
 			</button>
@@ -71,12 +71,24 @@
 				window.location.href="/music-search";
 			})
 			
+			$("#list-btn-div>button").click(function(){
+				window.location.href="/music-list";
+			})
+			
 			$("#back-btn").click(function(){
 				parent.location.href="/home";
 			})
 			
 			$("#play-btn-div>button").click(function(){
 				parent.play_pause();
+			})
+			
+			$("#prev-btn-div>button").click(function(){
+				parent.play_prev();
+			})
+			
+			$("#next-btn-div>button").click(function(){
+				parent.play_next();
 			})
 		})
 	</script>

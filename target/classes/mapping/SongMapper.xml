@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cararound.dao.SongMapper">
+	<resultMap id="BaseResultMap" type="com.cararound.entity.Song">
+		<id column="_mid" property="mid" />
+        <result column="_title" property="title" />
+        <result column="_singer" property="singer" />
+		<result column="_album" property="album" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		_mid, _title, _singer, _album
+	</sql>
+	<insert id="insertSelective" parameterType="com.cararound.entity.Song" >
+    insert into music
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        _mid,
+      </if>
+      <if test="title != null" >
+        _title,
+      </if>
+      <if test="singer != null" >
+        _singer,
+      </if>
+      <if test="album != null" >
+        _album,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        #{mid},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="singer != null" >
+        #{singer},
+      </if>
+      <if test="album != null" >
+        #{album},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectSongs" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from music
+  </select>
+  <select id="selectByMid" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from music
+    where _mid = #{mid}
+  </select>
+  <delete id="deleteByMid" parameterType="java.lang.String">  
+    delete from music
+    where _mid = #{mid}  
+  </delete> 
+</mapper>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>music search</title>
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="css/common.css">
@@ -32,6 +32,16 @@
 	<div class="music-list-div">
 	</div>
 	
+	<div id="music-modal" class="modal fade" tabindex="-1">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      			<div class="modal-body">
+        			<div id="modal-message"></div>
+      			</div>
+    		</div><!-- /.modal-content -->
+  		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<script>
 		var search_api="http://s.music.qq.com/fcgi-bin/music_search_new_platform?"+
 				"t=0&amp;n=10&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8"+
@@ -42,6 +52,7 @@
 		var content_now='';
 	
 		function search_music(page,content){
+			content=content.replace(/\s+/g,"%20");
 			var url=encodeURIComponent(search_api.format(page,content));
 			var search_json={"url":url};
 			$.ajax({
@@ -52,18 +63,45 @@
 				success:function(data){
 					var list = data.data.song.list;
 					for(var i=0; i<list.length; i++){
-						var mid=list[i].f.split("|")[20];
+						var f=list[i].f.split("|");
+						var mid=f[20];
+						var album=f[5];
 						$(".music-list-div").append('<div class="list-item" data-mid="'+mid+'">'+
-								'<div class="list-title-div">'+list[i].fsong+'</div>'+
-								'<div class="list-singer-div">'+list[i].fsinger+'</div>'+
-								'<div class="list-album-div">'+list[i].albumName_hilight+'</div>'+
+								'<div class="list-title-div" data-title="'+list[i].fsong+'">'+
+								cut_word(list[i].fsong, 22)+'</div>'+
+								'<div class="list-singer-div" data-singer="'+list[i].fsinger+'">'+
+								cut_word(list[i].fsinger, 12)+'</div>'+
+								'<div class="list-album-div" data-album="'+album+'">'+
+								cut_word(album,22)+'</div>'+
 								'<div class="list-btns-div">'+
 									'<button class="btn btn-default play-btn"><span class="glyphicon glyphicon-play"></span></button>'+
 									'<button class="btn btn-default like-btn"><span class="glyphicon glyphicon-plus"></span></button>'+
 								'</div></div>')
 					}
-					$(".play-btn").bind("click",play_song);
+					$(".play-btn").bind("click", play_song);
+					$(".like-btn").bind("click", add_like);
 		        }
+			})
+		}
+		
+		function add_like(){
+			var list_item=$(this).parent().parent();
+			var mid=list_item.attr("data-mid");
+			var title=list_item.find(".list-title-div").attr("data-title");
+			var singer=list_item.find(".list-singer-div").attr("data-singer");
+			var album=list_item.find(".list-album-div").attr("data-album");
+			var song=new Song(title,singer,album,mid);
+			$.ajax({
+				url: "/music/addLike",
+				type: "POST",
+				data: JSON.stringify(song),
+				dataType:"json",
+				contentType : 'application/json;charset=utf-8',
+				cache: false,
+				success: function(result){
+					$("#modal-message").html(result.message);
+					$("#music-modal").modal("show");
+				}
 			})
 		}
 		
@@ -75,9 +113,9 @@
 		function play_song(){
 			var list_item=$(this).parent().parent();
 			var mid=list_item.attr("data-mid");
-			var title=list_item.find(".list-title-div").html();
-			var singer=list_item.find(".list-singer-div").html();
-			var album=list_item.find(".list-album-div").html();
+			var title=list_item.find(".list-title-div").attr("data-title");
+			var singer=list_item.find(".list-singer-div").attr("data-singer");
+			var album=list_item.find(".list-album-div").attr("data-album");
 			var song=new Song(title,singer,album,mid);
 			parent.play_search_song(song);
 		}

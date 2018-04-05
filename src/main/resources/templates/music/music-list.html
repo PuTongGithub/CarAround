@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>music list</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/music-list.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/string-format.js"></script>
+<script src="js/music.js"></script>
+</head>
+<body>
+	<div style="height:15%">
+		<a id="back-btn" class="btn btn-default" href="/music-player">
+			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
+			<span>音乐</span>
+		</a>
+		<div id="title-div">我的收藏</div>
+	</div>
+	
+	<div class="music-list-div">
+	</div>
+	
+	<script>
+		get_songs();
+		
+		function get_songs(){
+			$.ajax({
+				url: "/music/getSongs",
+				type: "GET",
+				cache: false,
+				success:function(list){
+					for(var i=0; i<list.length; i++){
+						$(".music-list-div").append('<div class="list-item" data-index="'+i+'" data-mid="'+list[i].mid+'">'+
+								'<div class="list-title-div" data-title="'+list[i].title+'">'+
+								cut_word(list[i].title, 22)+'</div>'+
+								'<div class="list-singer-div" data-singer="'+list[i].singer+'">'+
+								cut_word(list[i].singer, 12)+'</div>'+
+								'<div class="list-album-div" data-album="'+list[i].album+'">'+
+								cut_word(list[i].album,22)+'</div>'+
+								'<div class="list-btns-div">'+
+									'<button class="btn btn-default play-btn"><span class="glyphicon glyphicon-play"></span></button>'+
+									'<button class="btn btn-default cancel-like-btn"><span class="glyphicon glyphicon-remove"></span></button>'+
+								'</div></div>')
+					}
+					$(".play-btn").bind("click",play_music);
+					$(".cancel-like-btn").bind("click",cancel_lick);
+		        }
+			})
+		}
+		
+		function cancel_lick(){
+			var list_item=$(this).parent().parent();
+			var mid=list_item.attr("data-mid");
+			$.ajax({
+				url: "/music/cancelLike",
+				type: "POST",
+				data: {"mid":mid},
+				cache: false,
+				success:function(){
+					list_item.remove();
+		        }
+			})
+		}
+		
+		function play_music(){
+			parent.play_list($(this).parent().parent().attr("data-index"));
+		}
+		
+		$(function(){
+			$("#title-div").click(function(){
+				alert($("[data-mid]").attr("data-mid"));
+			})
+		})
+	</script>
+</body>
+</html>

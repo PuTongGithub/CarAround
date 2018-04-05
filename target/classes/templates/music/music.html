@@ -6,41 +6,62 @@
 <link rel="stylesheet" href="css/music.css">
 <link rel="stylesheet" href="css/common.css">
 <script src="https://y.gtimg.cn/music/h5/player/player.js?max_age=2592000"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/music.js"></script>
 </head>
 <body>
 <iframe id="myFrame" src="/music-player" frameborder="0"></iframe>
 <script type="text/javascript">
 	var player = new QMplayer({ target: "auto" }); //初始化播放组件
-
-	var now_song=new Song("等你下课(with 杨瑞代)","周杰伦","等你下课","001J5QJL1pRQYB");
-	player.play(now_song.mid);
+	
+	play_list(0);
+	
+	function play_pause(){
+		player.toggle();
+	}
 
 	function play_search_song(song){
-		now_song=song;
 		player.play(song.mid);
+	}
+	
+	function send_song(){
+		var now_song = player.data.song;
+		if(now_song==null) return;
+		var song = new Song(now_song.title, now_song.singer[0].name, now_song.album.name, now_song.mid);
+		myFrame.contentWindow.change_song(song);
+	}
+	
+	function play_list(list_index){
+		$.ajax({
+			url: "/music/getSongs",
+			type: "GET",
+			cache: false,
+			success:function(list){
+				var mids = new Array();
+				for(var i=0; i<list.length; i++){
+					mids[i]=list[i].mid;
+				}
+				
+				player.play(mids,{index:list_index});
+	        }
+		})
+	}
+	
+	function play_next(){
+		player.playNext();
+	}
+	
+	function play_prev(){
+		player.playPrev();
 	}
 	
 	player.on("play", function(){
 		var player_url="/music-player";
-		var frame_url=myFrame.contentWindow.pathname;
+		var frame_url=myFrame.contentWindow.location.pathname;
 		if(player_url == frame_url){
 			send_song();
 		}
 	})
-	
-	function send_song(){
-		myFrame.contentWindow.change_song(now_song);
-	}
-	
-	function play_pause(){
-		if(player.state=='playing'){
-			player.pause();
-		}
-		else{
-			player.play();
-		}
-	}
 </script>
 </body>
 </html>
