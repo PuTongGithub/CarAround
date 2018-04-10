@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>com</title>
+<link rel="stylesheet" href="css/com.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="head-div" style="height:15%">
+		<a id="back-btn" class="btn btn-default" href="/home">
+			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
+			<span>返回</span>
+		</a>
+		<div id="title-div">通讯</div>
+	</div>
+	
+	<div class="body-div" style="height:85%">
+		<div class="chat-div">
+  			<div class="user-info-div">
+  				<div><span class="glyphicon glyphicon-user icon-span"></span></div>
+  				<div>丑小鸭<br />陕A123456</div>
+  			</div>
+			<div class="text-div">
+  				<div class="messages-div">
+				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
+				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
+				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
+				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
+				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
+				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
+				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
+				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
+				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
+  				</div>
+			</div>
+			<div class="input-div">
+				<form>
+					<textarea class="chat-textarea form-control" rows="4"></textarea>
+					<div class="send-btn-div">
+						<button type="button" class="btn btn-default send-btn">发送</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="contact-div">
+			<div class="contact-list-div">
+				<div class="contact-head-div">联系人列表
+					<button id="add-contact-btn" type="button" class="add-contact-btn btn">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>
+				<div class="list-group">
+  					<button type="button" class="list-group-item">
+  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
+  						<div>丑小鸭<br />陕A123456</div>
+  					</button>
+  					<button type="button" class="list-group-item">
+  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
+  						<div>丑小鸭<br />陕A123456</div>
+  					</button>
+  					<button type="button" class="list-group-item">
+  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
+  						<div>丑小鸭<br />陕A123456</div>
+  					</button>
+  					<button type="button" class="list-group-item">
+  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
+  						<div>丑小鸭<br />陕A123456</div>
+  					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="set-modal" class="modal fade" tabindex="-1">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<h4 class="modal-title">用户信息设置</h4>
+      			</div>
+      			<div class="modal-body">
+        			<form>
+  						<div class="form-group">
+    						<label>用户名</label>
+    						<input type="text" class="form-control" id="userName" placeholder="请输入您希望显示的用户名...">
+  						</div>
+  						<div class="form-group">
+    						<label>车牌号</label>
+    						<input type="text" class="form-control" id="carNumber"  placeholder="请输入您的车牌号...">
+  						</div>
+					</form>
+      			</div>
+      			<div class="modal-footer">
+        			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        			<button type="button" class="btn btn-primary">提交</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
+	
+	<div id="add-contact-modal" class="modal fade" tabindex="-1">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        			<h4 class="modal-title">添加联系人</h4>
+      			</div>
+      			<div class="modal-body">
+        			<form>
+  						<div class="form-group">
+    						<label>联系人车牌号</label>
+    						<input type="text" class="form-control" id="carNumber"  placeholder="请输入联系人的车牌号...">
+  						</div>
+					</form>
+      			</div>
+      			<div class="modal-footer">
+        			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        			<button type="button" class="btn btn-primary">添加</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
+	
+	<script>
+		$("#set-modal").modal("show");
+		$(function(){
+			$(".list-group-item").click(function(){
+				if($(this).attr("class") == "list-group-item active"){
+					return;
+				}
+				$(".list-group-item").attr("class","list-group-item");
+				$(this).attr("class","list-group-item active");
+			});
+			
+			$("#add-contact-btn").click(function(){
+				$("#add-contact-modal").modal("show");
+			});
+		})
+	</script>
+</body>
+</html>

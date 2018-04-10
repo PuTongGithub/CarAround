@@ -7,15 +7,6 @@ div{
 	color: white;
 }
 
-.city-div{
-	height: 100%;
-	width: 100%;
-  	display: flex;
-    align-items: center;
-    padding-left: 50px;
-	font-size: 36px;
-}
-
 .now-weather-div>div{
 	float: left;
 	height: 100%;

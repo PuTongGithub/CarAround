@@ -25,13 +25,13 @@ body{
 }
 
 .input-div>input{
-	height: 50px;
-	font-size: 28px;
+	height: 72px;
+	font-size: 36px;
 }
 
 .search-btn{
 	width: 20%;
-	height: 50px;
+	height: 72px;
 	float: left;
-	font-size: 28px;
+	font-size: 36px;
 }

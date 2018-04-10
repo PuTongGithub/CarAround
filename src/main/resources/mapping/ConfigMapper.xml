@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cararound.dao.ConfigMapper">
+	<resultMap id="BaseResultMap" type="com.cararound.entity.Config">
+		<id column="config_id" property="configId" />
+        <result column="com_user_id" property="comUserId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		config_id, com_user_id
+	</sql>
+	<insert id="insertSelective" parameterType="com.cararound.entity.Config" >
+    insert into config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="comUserId != null" >
+        com_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="comUserId != null" >
+        #{comUserId},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectConfig" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from config
+    limit 1
+  </select>
+</mapper>

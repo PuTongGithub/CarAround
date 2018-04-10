@@ -74,4 +74,9 @@ public class PagesCountroller {
 	public String music_list() {
 		return "/music/music-list";
 	}
+	
+	@GetMapping("/com")
+	public String com() {
+		return "/com/com";
+	}
 }

@@ -11,3 +11,9 @@ _singer varchar(50),
 _album varchar(50),
 primary key(_mid)
 ) engine=InnoDB default charset=utf8;
+
+create table config(
+config_id int not null auto_increment,
+com_user_id int,
+primary key(config_id)
+) engine=InnoDB default charset=utf8;

@@ -4,3 +4,20 @@ html,body{
     width: 100%;
     margin: 0px;
 }
+
+#back-btn{
+	height: 100%;
+	color: lightblue;
+	font-size: 48px;
+	padding: 30px;
+	background: none;
+	border: none;
+}
+
+#title-div{
+	height: 100%;
+	color: lightblue;
+	font-size: 48px;
+	float: right;
+	padding: 30px;
+}
