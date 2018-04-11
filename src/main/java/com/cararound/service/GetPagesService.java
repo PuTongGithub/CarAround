@@ -6,13 +6,17 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetPagesService {
 	public String getString(String urlPath, String method) throws Exception {  
-        URL url = new URL(urlPath);  
+		urlPath = encode(urlPath, "utf8");
+        URL url = new URL(urlPath);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setUseCaches(false);
         connection.setRequestMethod(method);
@@ -30,4 +34,19 @@ public class GetPagesService {
         connection.disconnect();
         return sb.toString();
     }
+	
+	private static String zhPattern = "[\\u4e00-\\u9fa5]+";  
+	  
+    public static String encode(String str, String charset)  
+            throws Exception {  
+        str = str.replaceAll(" ", "+");// 对空字符串进行处理  
+        Pattern p = Pattern.compile(zhPattern);  
+        Matcher m = p.matcher(str);  
+        StringBuffer b = new StringBuffer();  
+        while (m.find()) {  
+            m.appendReplacement(b, URLEncoder.encode(m.group(0), charset));  
+        }  
+        m.appendTail(b);  
+        return b.toString();  
+    }  
 }

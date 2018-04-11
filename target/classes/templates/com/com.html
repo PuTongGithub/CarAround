@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/url-builder.js"></script>
 </head>
 <body>
 	<div class="head-div" style="height:15%">
@@ -20,22 +21,9 @@
 	
 	<div class="body-div" style="height:85%">
 		<div class="chat-div">
-  			<div class="user-info-div">
-  				<div><span class="glyphicon glyphicon-user icon-span"></span></div>
-  				<div>丑小鸭<br />陕A123456</div>
-  			</div>
+  			<div class="user-info-div"></div>
 			<div class="text-div">
-  				<div class="messages-div">
-				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
-				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
-				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
-				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
-				<div class="message-div"><span class="user-name-span">Grizzly</span>:<span class="message-span">hi!</span></div>
-				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
-				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
-				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
-				<div class="message-div"><span class="user-name-span">丑小鸭</span>:<span class="message-span">SB!</span></div>
-  				</div>
+  				<div class="messages-div"></div>
 			</div>
 			<div class="input-div">
 				<form>
@@ -53,24 +41,7 @@
 						<span class="glyphicon glyphicon-plus"></span>
 					</button>
 				</div>
-				<div class="list-group">
-  					<button type="button" class="list-group-item">
-  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
-  						<div>丑小鸭<br />陕A123456</div>
-  					</button>
-  					<button type="button" class="list-group-item">
-  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
-  						<div>丑小鸭<br />陕A123456</div>
-  					</button>
-  					<button type="button" class="list-group-item">
-  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
-  						<div>丑小鸭<br />陕A123456</div>
-  					</button>
-  					<button type="button" class="list-group-item">
-  						<div><span class="glyphicon glyphicon-user icon-span"></span></div>
-  						<div>丑小鸭<br />陕A123456</div>
-  					</button>
-				</div>
+				<div class="list-group"></div>
 			</div>
 		</div>
 	</div>
@@ -94,8 +65,8 @@
 					</form>
       			</div>
       			<div class="modal-footer">
-        			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        			<button type="button" class="btn btn-primary">提交</button>
+        			<button id="set-close-btn" type="button" class="btn btn-default">关闭</button>
+        			<button id="set-submit-btn" type="button" class="btn btn-primary">提交</button>
       			</div>
     		</div>
   		</div>
@@ -112,32 +83,204 @@
         			<form>
   						<div class="form-group">
     						<label>联系人车牌号</label>
-    						<input type="text" class="form-control" id="carNumber"  placeholder="请输入联系人的车牌号...">
+    						<input type="text" class="form-control" id="contactCarNumber"  placeholder="请输入联系人的车牌号...">
   						</div>
 					</form>
       			</div>
       			<div class="modal-footer">
         			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        			<button type="button" class="btn btn-primary">添加</button>
+        			<button id="add-submit-btn" type="button" class="btn btn-primary">添加</button>
       			</div>
     		</div>
   		</div>
 	</div>
 	
 	<script>
-		$("#set-modal").modal("show");
-		$(function(){
-			$(".list-group-item").click(function(){
-				if($(this).attr("class") == "list-group-item active"){
-					return;
-				}
-				$(".list-group-item").attr("class","list-group-item");
-				$(this).attr("class","list-group-item active");
-			});
+		var service_url = "http://localhost:8084";
+	
+		var mainUserId;
+		var userName;
+		var carNumber;
+		
+		window.onload=comInit;
+		
+		function comInit(){
+			$.ajax({
+				url: "/com/getConfig",
+				type: "GET",
+				cache: false,
+				success:function(data){
+					if(data == ""){
+						$("#set-modal").modal("show");
+					}
+					else{
+						mainUserId = data.comUserId;
+						getUserInfo();
+						getContacts();
+					}
+		        }
+			})
+		}
+		
+		function getUserInfo(){
+			var user = {"userId": mainUserId};
+			var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/getUser", user))};
+			$.ajax({
+				url: "/getData.json",
+				type: "GET",
+				data: url_json,
+				cache: false,
+				success:function(data){
+					userName=data.userName;
+					carNumber=data.carNumber;
+		        }
+			})
+		}
+		
+		function getContacts(){
+			var user = {"mainUserId": mainUserId};
+			var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/getContacts", user))};
 			
+			$.ajax({
+			url: "/getData.json",
+			type: "GET",
+			data: url_json,
+			cache: false,
+			success:function(data){
+				$(".list-group").empty();
+					for(var i = 0; i < data.length; i++){
+						var name_span_id = 'contact-name-span' + i;
+						var carnum_span_id = 'contact-carnum-span' + i;
+						$(".list-group").append(
+								'<button type="button" class="list-group-item" data-user-id="'+data[i].contactUserId+'">'+
+  								'<div><span class="glyphicon glyphicon-user icon-span"></span></div>'+
+  								'<div><span class="name_span" id="'+name_span_id+'"></span><br />'+
+  								'<span id="'+carnum_span_id+'"></span></div></button>'
+							)
+						fillContact($("#"+name_span_id), $("#"+carnum_span_id), data[i].contactUserId);
+					}
+					$(".list-group-item").bind("click",listItemClick);
+	        	}
+			})
+		}
+		
+		function saveUserId(){
+			$.ajax({
+				url: "/com/setConfig",
+				type: "GET",
+				data: {"comUserId": mainUserId},
+				cache: false
+			})
+		}
+		
+		function fillContact(name_span, carnum_span, contactUserId){
+			var user = {"userId": contactUserId};
+			var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/getUser", user))};
+			$.ajax({
+				url: "/getData.json",
+				type: "GET",
+				data: url_json,
+				cache: false,
+				success:function(data){
+					name_span.html(data.userName);
+					carnum_span.html(data.carNumber);
+		        }
+			})
+		}
+		
+		function getChat(contactUserId, contactUserName){
+			var user = {"mainUserId": mainUserId,
+					"contactUserId": contactUserId};
+			var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/getMessages", user))};
+			
+			$.ajax({
+			url: "/getData.json",
+			type: "GET",
+			data: url_json,
+			cache: false,
+			success:function(data){
+					for(var i = 0; i < data.length; i++){
+						var name = data[i].sendUserId == mainUserId ? userName : contactUserName;
+						$(".messages-div").append(
+								'<div class="message-div">'+
+								'<span class="user-name-span">'+name+'</span>:'+
+								'<span class="message-span">'+data[i].content+'</span></div>'
+							)
+					}
+	        	}
+			})
+		}
+		
+		function listItemClick(){
+			if($(this).attr("class") == "list-group-item active"){
+				return;
+			}
+			$(".list-group-item").attr("class","list-group-item");
+			$(this).attr("class","list-group-item active");
+			
+			$(".user-info-div").empty();
+			$(".user-info-div").append($(this).html());
+			
+			$(".messages-div").empty();
+			getChat($(this).attr("data-user-id"), $(this).find(".name-span").html());
+		}
+		
+		$(function(){
 			$("#add-contact-btn").click(function(){
 				$("#add-contact-modal").modal("show");
 			});
+			
+			$("#set-close-btn").click(function(){
+				window.location.href="/home";
+			})
+			
+			$("#set-submit-btn").click(function(){
+				var user = {"userName":$("#userName").val(),
+						"carNumber": $("#carNumber").val()};
+				
+				var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/addUser", user))};
+				
+				$.ajax({
+				url: "/getData.json",
+				type: "GET",
+				data: url_json,
+				cache: false,
+				success:function(result){
+						if(result.success){
+							mainUserId = result.userId;
+							saveUserId();
+							$("#set-modal").modal("hide");
+						}
+						else{
+							alert(result.message);
+						}
+		        	}
+				})
+			})
+			
+			$("#add-submit-btn").click(function(){
+				var user = {"mainUserId": mainUserId,
+						"carNumber": $("#contactCarNumber").val()};
+				
+				var url_json = {"url": encodeURIComponent(build_url(service_url+"/com/addContact", user))};
+				
+				$.ajax({
+				url: "/getData.json",
+				type: "GET",
+				data: url_json,
+				cache: false,
+				success:function(result){
+						if(result.success){
+							getContacts();
+							alert(result.message)
+							$("#add-contact-modal").modal("hide");
+						}
+						else{
+							alert(result.message);
+						}
+		        	}
+				})
+			})
 		})
 	</script>
 </body>
