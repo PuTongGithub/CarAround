@@ -137,3 +137,8 @@ button.list-group-item{
 	margin-right: 30px;
 	line-height: inherit !important;
 }
+
+.message{
+	background: gray;
+	border: none;
+}
