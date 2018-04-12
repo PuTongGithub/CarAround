@@ -138,7 +138,7 @@ button.list-group-item{
 	line-height: inherit !important;
 }
 
-.message{
-	background: gray;
-	border: none;
+button.message{
+	background: lightgray;
+	border-color: none;
 }

@@ -158,7 +158,7 @@
 						$(".list-group").append(
 								'<button type="button" class="list-group-item" data-user-id="'+data[i].contactUserId+'">'+
   								'<div><span class="glyphicon glyphicon-user icon-span"></span></div>'+
-  								'<div><span class="name_span" id="'+name_span_id+'"></span><br />'+
+  								'<div><span class="name-span" id="'+name_span_id+'"></span><br />'+
   								'<span id="'+carnum_span_id+'"></span></div></button>'
 							)
 						fillContact($("#"+name_span_id), $("#"+carnum_span_id), data[i].contactUserId);
@@ -312,14 +312,13 @@
 
         //接收到消息的回调方法
         websocket.onmessage = function(event){
-            alert(event.data);
             var message = event.data.split('|');
             if(message[0] == "Message"){
-            	if(message[2] == $(".active").attr("data-user-id").toString()){
+            	if(message[1] == $(".active").attr("data-user-id")){
             		setMessage($(".active").find(".name-span").html(), message[3])
             	}
             	else{
-            		$("[data-user-id='"+message[2]+"']").attr("class","list-group-item message");
+            		$("[data-user-id='"+message[1]+"']").attr("class","list-group-item message");
             	}
             }
         }
