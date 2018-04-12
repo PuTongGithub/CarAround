@@ -11,7 +11,14 @@
 <script src="http://api.map.baidu.com/api?v=3.0&ak=oC5dSYZM3lRcH2mVqkiPqO3TSHnbbGc5"></script>
 </head>
 <body>
-	<div id="map-div"></div>
+	<div class="head-div" style="height:15%">
+		<a id="back-btn" class="btn btn-default" href="/home">
+			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
+			<span>返回</span>
+		</a>
+		<div id="title-div">百度地图</div>
+	</div>
+	<div id="map-div" style="height:85%"></div>
 	<script type="text/javascript"> 
 		var map = new BMap.Map("map-div");  // 创建地图实例  
 		var point = new BMap.Point(108.947,34.346);  // 创建点坐标  
