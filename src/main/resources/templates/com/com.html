@@ -228,9 +228,6 @@
 		function sendClick(){
 			if(websocket != null){
 				sendMessage();
-				  
-				var div = $('.messages-div'); 
-				div.scrollTop(div[0].scrollHeight); 
 			}
 		}
 		
@@ -349,6 +346,8 @@
 				'<span class="user-name-span">'+name+'</span>:'+
 				'<span class="message-span">'+content+'</span></div>'
 			)
+			var div = $('.messages-div'); 
+			div.scrollTop(div[0].scrollHeight); 
     }
 
     //发送消息
