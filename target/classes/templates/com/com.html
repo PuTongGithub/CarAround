@@ -225,6 +225,15 @@
 			getChat($(this).attr("data-user-id"), $(this).find(".name-span").html());
 		}
 		
+		function sendClick(){
+			if(websocket != null){
+				sendMessage();
+				  
+				var div = $('.messages-div'); 
+				div.scrollTop(div[0].scrollHeight); 
+			}
+		}
+		
 		$(function(){
 			$("#add-contact-btn").click(function(){
 				$("#add-contact-modal").modal("show");
@@ -283,10 +292,14 @@
 			})
 			
 			$(".send-btn").click(function(){
-				if(websocket != null){
-					sendMessage();
-				}
+				sendClick();
 			});
+			
+			$(".chat-textarea").keyup(function(even){
+				if(even.which == 13){
+					sendClick();
+				}
+			})
 		})
 
     //判断当前浏览器是否支持WebSocket

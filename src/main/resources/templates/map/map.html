@@ -16,6 +16,12 @@
 			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
 			<span>返回</span>
 		</a>
+		<div id="search-div">
+			<input type="text" class="form-control" id="search-input"  placeholder="搜索目的地...">
+			<button type="button" class="btn btn-default search-btn">
+				<span class="glyphicon glyphicon-search"></span>
+			</button>
+		</div>
 		<div id="title-div">百度地图</div>
 	</div>
 	<div id="map-div" style="height:85%"></div>
@@ -24,6 +30,22 @@
 		var point = new BMap.Point(108.947,34.346);  // 创建点坐标  
 		map.centerAndZoom(point, 12);  // 初始化地图，设置中心点坐标和地图级别  
 		map.enableScrollWheelZoom(true);  //开启鼠标滚轮缩放
+		var local = new BMap.LocalSearch(map, {      
+		    renderOptions:{map: map}      
+		});
+		
+		function searchPOI(content){
+			local.search(content);
+		}
+		
+		$(function(){
+			$(".search-btn").click(function(){
+				var content = $("#search-input").val();
+				if(content != ''){
+					searchPOI(content);
+				}
+			});
+		})
 	</script>  
 </body>
 </html>

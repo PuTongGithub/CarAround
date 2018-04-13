@@ -6,3 +6,17 @@
 .head-div{
 	background: #45484d;
 }
+
+#search-div{
+	float: left;
+	margin-top: 50px;
+}
+
+#search-input{
+	float: left;
+	width: 500px;
+}
+
+.search-btn{
+	float: left;
+}
