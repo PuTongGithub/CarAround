@@ -48,6 +48,11 @@
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>com.baidu.aip</groupId>
+    		<artifactId>java-sdk</artifactId>
+    		<version>4.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<!-- Package as an executable jar -->

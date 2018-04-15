@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/recorder.js"></script>
+</head>
+<body>
+	<audio controls autoplay></audio>
+	<input onclick="startRecording()" type="button" value="start recording" />
+	<input onclick="stopRecording()" type="button" value="stop recording and play" />
+	<input onclick="sendRecording()" type="button" value="send recording" />
+	<div id="message-div"></div>
+
+	<script>
+		var onFail = function(e) {
+			console.log('Rejected!', e);
+		};
+
+		var onSuccess = function(s) {
+			var context = new AudioContext();
+			var mediaStreamSource = context.createMediaStreamSource(s);
+			recorder = new Recorder(mediaStreamSource);
+			recorder.record();
+
+			// audio loopback
+			// mediaStreamSource.connect(context.destination);
+		}
+
+		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		window.URL = window.URL || window.webkitURL;
+		navigator.getUserMedia = navigator.getUserMedia
+				|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+				|| navigator.msGetUserMedia;
+
+		var recorder;
+		var audio = document.querySelector('audio');
+		var audioBlob;
+
+		function startRecording() {
+			if (navigator.getUserMedia) {
+				navigator.getUserMedia({
+					audio : true
+				}, onSuccess, onFail);
+			} else {
+				console.log('navigator.getUserMedia not present');
+			}
+		}
+
+		function stopRecording() {
+			recorder.stop();
+			recorder.exportWAV(function(s) {
+				audioBlob = s;
+				audio.src = window.URL.createObjectURL(s);
+			});
+		}
+		
+		function sendRecording() {
+			$("#message-div").empty();
+			var formData = new FormData();
+			formData.append("audioBlob", audioBlob);
+			$.ajax({
+				url: "/speech",
+				type: "POST",
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success:function(result){
+					if(result.success){
+						$("#message-div").html(result.message);
+					}
+					else{
+						alert("rec fail!");
+					}
+		        }
+			});
+		}
+	</script>
+</body>
+</html>
