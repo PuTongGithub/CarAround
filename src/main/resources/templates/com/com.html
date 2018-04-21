@@ -355,6 +355,10 @@
     	var reciveId = $(".active").attr("data-user-id");
     	var content = $(".chat-textarea").val();
     	
+    	if(reciveId == null || content == ''){
+    		return;
+    	}
+    	
     	var message_obj = {"sendUserId": mainUserId,
 				"reciveUserId": reciveId,
 				"content": content};

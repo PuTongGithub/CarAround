@@ -14,7 +14,7 @@
 			<div class="col-md-2 col-xs-2 navigation-div">
 				<div style="height: 10%"></div>
 				<div style="height: 15%;">
-					<img src="/images/voice-icon.png" class="img-circle">
+					<img id="voice-img" src="/images/voice-icon.png" class="img-circle">
 				</div>
 				<div style="height: 10%"></div>
 				
@@ -50,6 +50,15 @@
 		$(function(){
 			$("#index-img").click(function(){
 				$("#index-iframe")[0].contentWindow.location.href="/home";
+			});
+			
+			$("#voice-img").click(function(){
+				if($("#voice-img").attr("src") == "/images/voice-icon.png"){
+					$("#voice-img").attr("src", "/images/rec-icon.gif");
+				}
+				else{
+					$("#voice-img").attr("src", "/images/voice-icon.png");
+				}
 			});
 		})
 	</script>
