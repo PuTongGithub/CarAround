@@ -120,6 +120,11 @@
 			parent.play_search_song(song);
 		}
 		
+		function no_song(){
+			$("#modal-message").html("抱歉，这首歌曲暂时无法播放");
+			$("#music-modal").modal("show");
+		}
+		
 		$(function(){
 			$(".search-btn").click(function(){
 				var content=$("#search-input").val();

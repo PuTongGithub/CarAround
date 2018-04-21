@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cararound.dao.TestdataMapper">
+	<resultMap id="BaseResultMap" type="com.cararound.entity.Testdata">
+		<id column="id" property="id" />
+        <result column="_date" property="date" />
+        <result column="_value" property="value" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, _date, _value
+	</sql>
+	<insert id="insertSelective" parameterType="com.cararound.entity.Testdata" >
+    insert into testdata
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="date != null" >
+        _date,
+      </if>
+      <if test="value != null" >
+        _value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="date != null" >
+        #{date},
+      </if>
+      <if test="date != null" >
+        #{date},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectTestdata" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from testdata
+  </select>
+</mapper>

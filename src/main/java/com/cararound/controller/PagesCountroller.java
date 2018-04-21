@@ -79,4 +79,9 @@ public class PagesCountroller {
 	public String com() {
 		return "/com/com";
 	}
+	
+	@GetMapping("/status")
+	public String status() {
+		return "/status/status";
+	}
 }

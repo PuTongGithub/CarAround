@@ -17,3 +17,10 @@ config_id int not null auto_increment,
 com_user_id int,
 primary key(config_id)
 ) engine=InnoDB default charset=utf8;
+
+create table testdata(
+id int not null auto_increment,
+_date varchar(20) not null,
+_value int not null,
+primary key(id)
+) engine=InnoDB default charset=utf8;

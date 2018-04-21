@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>status</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/status.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/echarts.common.min.js"></script>
+<script src="js/dark.js"></script>
+</head>
+<body>
+	<div style="height:15%;">
+		<a id="back-btn" class="btn btn-default" href="/home">
+			<span class="glyphicon glyphicon-menu-left" style="font-size:40px;"></span>
+			<span>返回</span>
+		</a>
+		<div id="title-div">车辆状况</div>
+	</div>
+
+	<div class="container-fluid" style="height:85%;">
+		<div class="row">
+			<div id="tank-div" class="col-md-6 col-xs-6"></div>
+			<div id="fuel-div" class="col-md-6 col-xs-6"></div>
+		</div>
+		<div class="row">
+			<div id="driving-div" class="col-md-6 col-xs-6"></div>
+			<div id="mileage-div" class="col-md-6 col-xs-6"></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		var xAxis_data = new Array();
+		var data_data = new Array();
+		
+		window.onload = iniPage;
+		
+		function iniPage(){
+			getDatas();
+		}
+		
+		function getDatas(){
+			$.ajax({
+				url: '/status/getDatas',
+				type: "GET",
+				cache: false,
+				success:function(datas){
+					for(var i=0; i<datas.length; i++){
+						xAxis_data[i]=datas[i].date;
+						data_data[i]=datas[i].value;
+					}
+
+					drawTank();
+					drawFuel();
+					drawDriving();
+					drawMileage();
+		        }
+			})
+		}
+		
+		function drawTank(){
+        	var myChart = echarts.init($('#tank-div')[0], 'dark');
+        
+        	var option = {
+        			backgroundColor: 'transparent',
+        			title: {
+        		        text: '汽车燃油量'
+        		    },
+        	    	tooltip: {
+        	    		type: 'showTip',
+        	            trigger: 'item',
+        	            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        	        },
+        	        series: [
+        	            {
+        	                name:'燃油量',
+        	                type:'pie',
+        	                radius: ['50%', '70%'],
+        	                data:[
+        	                    {value:30, name:'已用量'},
+        	                    {value:70, name:'剩余量'},
+        	                ]
+        	            }
+        	        ]
+        		};
+
+       		myChart.setOption(option);
+		}
+		
+		function drawFuel(){
+        	var myChart = echarts.init($('#fuel-div')[0], 'dark');
+        
+        	var option = {
+        			backgroundColor: 'transparent',
+        			title: {
+        		        text: '车辆每日油耗统计'
+        		    },
+        	    	xAxis: {
+        	        	data: xAxis_data
+        	    	},
+        	    	yAxis: {},
+        	    	series: [{
+        	        	data: data_data,
+        	        	type: 'bar'
+        	    	}]
+        		};
+
+       		myChart.setOption(option);
+		}
+		
+		function drawDriving(){
+        	var myChart = echarts.init($('#driving-div')[0], 'dark');
+        
+        	var option = {
+        			backgroundColor: 'transparent',
+        		    color: ['#3398DB'],
+        			title: {
+        		        text: '车辆每日驾驶时间统计'
+        		    },
+        	    	xAxis: {
+        	        	data: xAxis_data
+        	    	},
+        	    	yAxis: {},
+        	    	series: [{
+        	        	data: data_data,
+        	        	type: 'bar'
+        	    	}]
+        		};
+
+       		myChart.setOption(option);
+		}
+		
+		function drawMileage(){
+        	var myChart = echarts.init($('#mileage-div')[0], 'dark');
+        
+        	var option = {
+        			backgroundColor: 'transparent',
+        		    color: ['#759aa0'],
+        			title: {
+        		        text: '车辆每日行驶里程统计'
+        		    },
+        	    	xAxis: {
+        	        	data: xAxis_data
+        	    	},
+        	    	yAxis: {},
+        	    	series: [{
+        	        	data: data_data,
+        	        	type: 'bar'
+        	    	}]
+        		};
+
+       		myChart.setOption(option);
+		}
+    </script>
+</body>
+</html>

@@ -62,6 +62,10 @@
 			send_song();
 		}
 	})
+	
+	player.on("error", function(e){
+		myFrame.contentWindow.no_song();
+	})
 </script>
 </body>
 </html>
