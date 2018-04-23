@@ -1,5 +1,7 @@
 package com.cararound.tool;
 
+import java.util.HashMap;
+
 import org.json.JSONObject;
 
 import com.baidu.aip.speech.AipSpeech;
@@ -11,8 +13,17 @@ public class SpeechRec {
     private static AipSpeech client = new AipSpeech(APP_ID, API_KEY, SECRET_KEY);
 
     public static String getStr(byte[] speech) {
+    	// 设置语音识别模式（普通话，无标点）
+    	HashMap<String, Object> options = new HashMap<>();
+    	options.put("dev_pid", 1536);
+    	
         // 调用接口
-        JSONObject res = client.asr(speech, "wav", 16000, null);
-        return res.toString(2);
+        JSONObject res = client.asr(speech, "wav", 16000, options);
+        if(res.getLong("err_no") == 0) {
+            return res.getJSONArray("result").getString(0);
+        }
+        else {
+        	return null;
+        }
     }
 }

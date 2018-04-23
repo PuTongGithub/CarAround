@@ -8,6 +8,7 @@
 </head>
 <body>
 	<audio controls autoplay></audio>
+	<input onclick="getUserMedia()" type="button" value="get UserMedia" />
 	<input onclick="startRecording()" type="button" value="start recording" />
 	<input onclick="stopRecording()" type="button" value="stop recording and play" />
 	<input onclick="sendRecording()" type="button" value="send recording" />
@@ -22,7 +23,6 @@
 			var context = new AudioContext();
 			var mediaStreamSource = context.createMediaStreamSource(s);
 			recorder = new Recorder(mediaStreamSource);
-			recorder.record();
 			// audio loopback
 			// mediaStreamSource.connect(context.destination);
 		}
@@ -35,7 +35,13 @@
 		var recorder;
 		var audio = document.querySelector('audio');
 		var audioBlob;
+		
 		function startRecording() {
+			recorder.clear();
+			recorder.record();
+		}
+		
+		function getUserMedia(){
 			if (navigator.getUserMedia) {
 				navigator.getUserMedia({
 					audio : true
@@ -69,7 +75,7 @@
 						$("#message-div").html(result.message);
 					}
 					else{
-						alert("rec fail!");
+						alert(result.message);
 					}
 		        }
 			});

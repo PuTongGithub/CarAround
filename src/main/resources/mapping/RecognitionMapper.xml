@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cararound.dao.RecognitionMapper">
+	<resultMap id="BaseResultMap" type="com.cararound.entity.Recognition">
+		<id column="id" property="id" />
+        <result column="_code" property="code" />
+        <result column="regex_pattern" property="regexPattern" />
+        <result column="_status" property="status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, _code, regex_pattern, _status
+	</sql>
+	<insert id="insertSelective" parameterType="com.cararound.entity.Recognition" >
+    insert into recognition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        _code,
+      </if>
+      <if test="regexPattern != null" >
+        regex_pattern,
+      </if>
+      <if test="status != null" >
+        _status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code},
+      </if>
+      <if test="regexPattern != null" >
+        #{regexPattern},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectRecognition" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from recognition
+  </select>
+</mapper>

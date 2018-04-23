@@ -24,3 +24,11 @@ _date varchar(20) not null,
 _value int not null,
 primary key(id)
 ) engine=InnoDB default charset=utf8;
+
+create table recognition(
+id int not null auto_increment,
+_code varchar(10) not null,
+regex_pattern varchar(100) not null,
+_status int not null default 0,
+primary key(id)
+) engine=InnoDB default charset=utf8;
