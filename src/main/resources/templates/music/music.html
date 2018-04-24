@@ -12,9 +12,20 @@
 <body>
 <iframe id="myFrame" src="/music-player" frameborder="0"></iframe>
 <script type="text/javascript">
-	var player = new QMplayer({ target: "auto" }); //初始化播放组件
+	window.onload = function(){
+		play_list(0);
+		parent.frameCallBack();
+	}
 	
-	play_list(0);
+	function to_search(){
+		myFrame.contentWindow.location.href = "/music-search";
+	}
+	
+	function search_song(content){
+		myFrame.contentWindow.search_music(1,content);
+	}
+
+	var player = new QMplayer({ target: "auto" }); //初始化播放组件
 	
 	function play_pause(){
 		player.toggle();

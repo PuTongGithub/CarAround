@@ -37,7 +37,7 @@ public class SpeechController {
 		String[] result = speechMatch.match(speechStr);
 		if(result == null) {
 			map.put("success", false);
-			map.put("message", "指令匹配错误！");
+			map.put("message", "指令无效："+speechStr);
 			return map;
 		}
 		

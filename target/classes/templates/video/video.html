@@ -34,9 +34,17 @@
 	</div>
 	
 	<script>
+		window.onload = function(){
+			parent.frameCallBack();
+		}
+		
+		function searchVideo(content){
+			window.location.href="http://www.soku.com/search_video/q_"+content;
+		}
+	
 		$(".search-btn").click(function(){
 			if($("#search-input").val() != ''){
-				window.location.href="http://www.soku.com/search_video/q_"+$("#search-input").val();
+				searchVideo($("#search-input").val());
 			}
 		})
 	</script>

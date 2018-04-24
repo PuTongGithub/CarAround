@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="css/index.css">
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/recorder.js"></script>
+<script src="/js/recorderWorker.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -30,12 +32,31 @@
 			</div>
 			
 			<div class="col-md-10 col-xs-10 content-div">
-				<iframe id="index-iframe" src="/home" frameborder="0" style="height:100%;width:100%;"></iframe>
+				<iframe id="myFrame" src="/home" frameborder="0" style="height:100%;width:100%;"></iframe>
 			</div>
 		</div>
 	</div>
+	
+	<div id="speech-modal" class="modal fade" tabindex="-1">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      			<div class="modal-body modal-content">
+        			<div id="modal-message">
+        			</div>
+      			</div>
+    		</div><!-- /.modal-content -->
+  		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<script type="text/javascript">
-		setTimeDiv();
+		var appList;
+	
+		window.onload = function(){
+			setTimeDiv();
+			getUserMedia();
+			getAppList();
+		}
+		
 		function setTimeDiv(){
 			var dateNow=new Date();
 			var time=dateNow.getHours()+":"+toTimeStr(dateNow.getMinutes());
@@ -49,18 +70,219 @@
 		
 		$(function(){
 			$("#index-img").click(function(){
-				$("#index-iframe")[0].contentWindow.location.href="/home";
+				$("#myFrame")[0].contentWindow.location.href="/home";
 			});
 			
 			$("#voice-img").click(function(){
 				if($("#voice-img").attr("src") == "/images/voice-icon.png"){
 					$("#voice-img").attr("src", "/images/rec-icon.gif");
+					startRecording();
 				}
 				else{
 					$("#voice-img").attr("src", "/images/voice-icon.png");
+					stopRecording()
 				}
 			});
 		})
+		
+		
+		
+		function getAppList(){
+			appList = new Array();
+			appList["主页"]="/home";
+			appList["天气"]="/weather";
+			appList["百度地图"]="/map";
+			appList["电台"]="/fm";
+			appList["音乐"]="/music";
+			appList["新闻头条"]="/news";
+			appList["视频搜索"]="/video";
+			appList["通讯"]="/com";
+			appList["车辆状况"]="/status";
+		}
+	</script>
+	<script>
+	//语音识别部分
+	window.AudioContext = window.AudioContext||window.webkitAudioContext;
+	window.URL = window.URL || window.webkitURL;
+	navigator.getUserMedia = navigator.getUserMedia
+			|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+			|| navigator.msGetUserMedia;
+	var recorder;
+	var audioBlob;
+	
+	var onFail = function(e) {
+		console.log('Rejected!', e);
+	};
+	
+	var onSuccess = function(s) {
+		var context = new AudioContext();
+		var mediaStreamSource = context.createMediaStreamSource(s);
+		recorder = new Recorder(mediaStreamSource);
+	}
+	
+	function getUserMedia(){
+		if (navigator.getUserMedia) {
+			navigator.getUserMedia({
+				audio : true
+			}, onSuccess, onFail);
+		} else {
+			console.log('navigator.getUserMedia not present');
+		}
+	}
+	
+	function startRecording() {
+		recorder.clear();
+		recorder.record();
+	}
+	
+	function stopRecording() {
+		recorder.stop();
+		$("#speech-modal").modal("show");
+		$("#modal-message").empty();
+		$("#modal-message").append('<img src="/images/rec-wait.gif">'+
+        		'<span>&nbsp;正在识别...</span>');
+		recorder.exportWAV(function(s) {
+			audioBlob = s;
+			sendRecording()
+		});
+	}
+	
+	function hideModal(){
+		$("#speech-modal").modal("hide");
+	}
+	
+	function modalWorning(content){
+		$("#modal-message").html(content);
+		setTimeout(hideModal, 3500);
+	}
+	
+	function sendRecording() {
+		var formData = new FormData();
+		formData.append("audioBlob", audioBlob);
+		$.ajax({
+			url: "/speech",
+			type: "POST",
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success:function(result){
+				if(result.success){
+					switch(result.code){
+					case "1000":
+						if(appList.hasOwnProperty(result.message)){
+							hideModal();
+							$("#myFrame")[0].contentWindow.location.href=appList[result.message];
+						}
+						else{
+							modalWorning('页面  "'+result.message+'"  不存在！');
+						}
+						break;
+					case "2001":
+						hideModal();
+						$("#myFrame")[0].contentWindow.location.href="/map";
+						callBackTag = true;
+						messages = new Array();
+						messages[0] = result.message;
+						callBackFunc = searchPlace;
+						break;
+					case "2002":
+						hideModal();
+						$("#myFrame")[0].contentWindow.location.href="/map";
+						callBackTag = true;
+						messages = new Array();
+						messages[0] = result.message;
+						messages[1] = result.message2;
+						callBackFunc = searchPath;
+						break;
+					case "3001":
+						hideModal();
+						$("#myFrame")[0].contentWindow.location.href="/music";
+						callBackTag = true;
+						messages = new Array();
+						messages[0] = result.message
+						callBackFunc = toSearch;
+						break;
+					case "4001":
+						hideModal();
+						$("#myFrame")[0].contentWindow.location.href="/video";
+						callBackTag = true;
+						messages = new Array();
+						messages[0] = result.message
+						callBackFunc = searchVideo;
+						break;
+					case "5001":
+						hideModal();
+						$("#myFrame")[0].contentWindow.location.href="/com";
+						callBackTag = true;
+						messages = new Array();
+						messages[0] = result.message;
+						messages[1] = result.message2;
+						callBackFunc = sendMessage;
+						break;
+					default:
+						modalWorning("未知指令码！");
+						break;
+					}
+				}
+				else{
+					modalWorning(result.message);
+				}
+	        }
+		});
+	}
+	</script>
+	<script>
+	//子页面回调部分
+	var callBackTag = false;
+	var messages;
+	var callBackFunc;
+	
+	function frameCallBack(){
+		if(callBackTag == false){
+			return;
+		}
+		
+		callBackTag = false;
+		
+		if(messages.length == 0){
+			callBackFunc();
+		}
+		
+		if(messages.length == 1){
+			callBackFunc(messages[0]);
+		}
+		
+		if(messages.length == 2){
+			callBackFunc(messages[0], messages[1]);
+		}
+	}
+	
+	function searchPlace(place){
+		$("#myFrame")[0].contentWindow.searchPOI(place);
+	}
+	
+	function searchSong(song){
+		$("#myFrame")[0].contentWindow.search_song(song);
+	}
+	
+	function searchVideo(video){
+		$("#myFrame")[0].contentWindow.searchVideo(video);
+	}
+	
+	function searchPath(p1, p2){
+		$("#myFrame")[0].contentWindow.pathPlan(p1, p2);
+	}
+	
+	function sendMessage(userName, content){
+		$("#myFrame")[0].contentWindow.sendMessageBySpeech(userName, content);
+	}
+	
+	function toSearch(song){
+		callBackTag = true;
+		callBackFunc = searchSong;
+		$("#myFrame")[0].contentWindow.to_search();
+	}
 	</script>
 </body>
 </html>

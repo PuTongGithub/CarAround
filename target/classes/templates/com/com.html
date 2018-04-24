@@ -102,10 +102,54 @@
 		var mainUserId;
 		var userName;
 		var carNumber;
+		var contactsInfo = new Array();
 		
 	    var websocket = null;
 		
-		window.onload=comInit;
+		window.onload = function(){
+			comInit();
+			parent.frameCallBack();
+		}
+		
+		function sendMessageBySpeech(userName, content){
+			speechUserName = userName;
+			speechContent = content;
+			setTimeout(send, 1000);
+		}
+		
+		var speechUserName;
+		var speechContent;
+		
+		function send(){
+			if(userChoose(speechUserName) == false){
+				return;
+			}
+			$(".chat-textarea").val(speechContent);
+			setTimeout(sendMessage, 500);
+		}
+		
+		function userChoose(userName){
+			if(contactsInfo.hasOwnProperty(userName) == false){
+				alert("未知用户名:" + userName);
+				return false;
+			}
+			
+			var userId = contactsInfo[userName];
+			
+			var item = $("[data-user-id="+userId+"]");
+			if(item.attr("class") == "list-group-item active"){
+				return;
+			}
+			$(".list-group-item").attr("class","list-group-item");
+			item.attr("class","list-group-item active");
+			
+			$(".user-info-div").empty();
+			$(".user-info-div").append(item.html());
+			
+			$(".messages-div").empty();
+			getChat(item.attr("data-user-id"), item.find(".name-span").html());
+			return true;
+		}
 		
 		function comInit(){
 			$.ajax({
@@ -188,6 +232,7 @@
 				success:function(data){
 					name_span.html(data.userName);
 					carnum_span.html(data.carNumber);
+					contactsInfo[data.userName] = contactUserId;
 		        }
 			})
 		}

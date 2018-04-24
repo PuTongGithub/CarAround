@@ -43,6 +43,10 @@
 	</div><!-- /.modal -->
 	
 	<script>
+	window.onload = function(){
+		parent.parent.frameCallBack();
+	}
+	
 		var search_api="http://s.music.qq.com/fcgi-bin/music_search_new_platform?"+
 				"t=0&amp;n=10&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8"+
 				"&notice=0&platform=jqminiframe.json&needNewCode=0&p={0}&catZhida=0"+
