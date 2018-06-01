@@ -67,11 +67,17 @@
 		player.playPrev();
 	}
 	
+	var is_first_play = true;
+	
 	player.on("play", function(){
 		var player_url="/music-player";
 		var frame_url=myFrame.contentWindow.location.pathname;
 		if(player_url == frame_url){
 			send_song();
+		}
+		if(is_first_play){
+			player.toggle();
+			is_first_play = false;
 		}
 	})
 	
